@@ -1,0 +1,88 @@
+﻿<Window x:Class="MessageApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MessageApp"
+        mc:Ignorable="d"
+        Title="Messages App" SizeToContent="Height" MinHeight="300" MinWidth="300" Width="500" >
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" >
+            <Border Margin="5">
+                <Button x:Name="NewMessageButton" Width="50"  Height="auto" Click="NewMessageButtonClick">New...</Button>
+            </Border>
+            <Border Margin="5">
+                <Button x:Name="DeleteMessageButton" Width="50" Height="auto"  Click="DeleteMessageButtonClick">Delete</Button>
+            </Border>
+        </StackPanel>
+
+        <TextBlock x:Name="StatusBar" Panel.ZIndex="1" Grid.Row="1" Height="0" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" 
+            TextAlignment="Center" FontFamily="Berlin Sans FB"  FontSize="14"/>
+        <Grid Margin="5" Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" MinWidth="100"></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="3*" MinWidth="100"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <ListBox x:Name="MessagesList" ItemsSource="{Binding MessageService.Messages}" Grid.Column="0" SelectedIndex="0">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock FontSize="16" Text="{Binding Subject}" TextTrimming="CharacterEllipsis"/>
+                            <TextBlock Text="{Binding DateSent,StringFormat=dd/MM/yyyy}" TextTrimming="CharacterEllipsis"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <GridSplitter Grid.Column="1" ResizeBehavior="BasedOnAlignment" Width="5" HorizontalAlignment="Stretch"/>
+            <Grid Margin="5" Grid.Column="2" HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="1*"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="1*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Border Grid.Column="0" Grid.Row="0" Margin="5">
+                    <TextBlock  HorizontalAlignment="Right" Text="Subject"/>
+                </Border>
+                <Border Grid.Column="1" Grid.Row="0" Margin="5">
+                    <TextBlock Text="{Binding ElementName=MessagesList, Path=SelectedItem.Subject}" HorizontalAlignment="left" />
+                </Border>
+                <Border Grid.Column="0" Grid.Row="1" Margin="5">
+                    <TextBlock  HorizontalAlignment="Right" Text="To"/>
+                </Border>
+                <Border Grid.Column="1" Grid.Row="1" Margin="5" >
+                    <ListBox  ItemsSource="{Binding ElementName=MessagesList, Path=SelectedItem.Recipients}" HorizontalAlignment="Stretch">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock TextTrimming="CharacterEllipsis">
+                                    <Run Text="{Binding FirstName}"/>
+                                    <Run Text="{Binding LastName}"/>
+                                    <Run Text="("/><Run Text="{Binding Email}"/><Run Text=")"/>
+                                </TextBlock>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Border>
+                <Border Grid.Column="0" Grid.Row="2" Margin="5">
+                    <TextBlock HorizontalAlignment="Right" Text="Date"/>
+                </Border>
+                <Border  Grid.Column="1" Grid.Row="2" Margin="5">
+                    <TextBlock Text="{Binding ElementName=MessagesList, Path=SelectedItem.DateSent,StringFormat=dd/MM/yyyy}"  HorizontalAlignment="left" />
+                </Border>
+                <Border Margin="5"  Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2">
+                    <TextBlock Text="{Binding ElementName=MessagesList, Path=SelectedItem.Body}" TextWrapping="Wrap"/>
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
